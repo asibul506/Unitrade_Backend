@@ -1,5 +1,6 @@
 package com.uniTrade.uniTrade.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Document(collection = "Users")
 public class User {
     @Id
+    @JsonProperty("_id")
     private String _id;
     private int matriculation;
     private String firstName;
@@ -20,6 +22,7 @@ public class User {
     private String password;
     private List<String> role;
     private LocalDateTime createdAt;
+    private LocalDateTime lastUpdatedAt;
 
     public User() {
         this.createdAt = LocalDateTime.now();
@@ -42,6 +45,14 @@ public class User {
         }*/
         this.createdAt = createdAt;
         //this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
+    }
+
+    public LocalDateTime getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
     }
 
     public int getMatriculation() {
@@ -120,6 +131,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 ", createdAt=" + createdAt +
+                ", lastUpdatedAt=" + lastUpdatedAt +
                 '}';
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,17 +23,10 @@ public class LeadController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/create-lead")
-    public ResponseEntity<Lead> createLead(@RequestBody Lead lead) {
-        Optional<User> userOptional = userRepository.findByMatriculation(lead.getUserMatriculation());
-
-        // Ensure the lead has a valid user matriculation number
-        if (userOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        System.out.println("Lead: " + lead);
-        Lead newLead = leadRepository.save(lead);
-        return new ResponseEntity<>(newLead, HttpStatus.CREATED);
+    @GetMapping("/leads")
+    public ResponseEntity<List<Lead>> getAllLeads() {
+        List<Lead> leads = leadRepository.findAllByOrderByCreatedAtDesc();
+        return new ResponseEntity<>(leads, HttpStatus.OK);
     }
 
     @GetMapping("/lead-by-user/{matriculation}")
@@ -49,38 +43,70 @@ public class LeadController {
         }
     }
 
-
-    @GetMapping("/leads")
-    public ResponseEntity<List<Lead>> getAllLeads() {
-        List<Lead> leads = leadRepository.findAllByOrderByCreatedAtDesc();
-        return new ResponseEntity<>(leads, HttpStatus.OK);
-    }
-
     @GetMapping("/lead-by-id/{lId}")
     public ResponseEntity<Lead> getLeadByLeadId(@PathVariable int lId) {
-        Optional<Lead> leadOptional = leadRepository.findByLId(lId);
+        Optional<Lead> leadOptional = leadRepository.findBylId(lId);
 
         return leadOptional.map(lead -> new ResponseEntity<>(lead, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<Lead> updateLead(@PathVariable String id, @RequestBody Lead lead) {
-        if (!lRepo.existsById(id)) {
+    @PostMapping("/create-lead")
+    public ResponseEntity<Lead> createLead(@RequestBody Lead lead) {
+        Optional<User> userOptional = userRepository.findByMatriculation(lead.getUserMatriculation());
+
+        // Ensure the lead has a valid user matriculation number
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        lead.setlId(Integer.parseInt((String)id));
-        Lead updatedLead = lRepo.save(lead);
-        return new ResponseEntity<>(updatedLead, HttpStatus.OK);
+        System.out.println("Creating lead");
+        System.out.println("Lead: " + lead);
+        Lead newLead = leadRepository.save(lead);
+        return new ResponseEntity<>(newLead, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLead(@PathVariable String id) {
-        if (!lRepo.existsById(id)) {
+    @PutMapping("/update/{lId}")
+    public ResponseEntity<Lead> updateLead(@PathVariable int lId, @RequestBody Lead lead) {
+        Optional<Lead> leadOptional = leadRepository.findBylId(lId);
+
+        if (leadOptional.isPresent()) {
+            Lead leadToUpdate = leadOptional.get();
+            leadToUpdate.setContent(lead.getContent());
+            //leadToUpdate.setUserMatriculation(lead.getUserMatriculation());
+            leadToUpdate.setCreatedAt(lead.getCreatedAt());
+            leadToUpdate.setContent(lead.getContent());
+            leadToUpdate.setImageUrls(lead.getImageUrls());
+            leadToUpdate.setComments(lead.getComments());
+            leadToUpdate.setLikes(lead.getLikes());
+
+            if (leadToUpdate.getLastUpdatedAt() == null) {
+                leadToUpdate.setLastUpdatedAt(LocalDateTime.now());
+            }
+
+            return new ResponseEntity<>(leadRepository.save(leadToUpdate), HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        lRepo.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }*/
+    }
+
+    @DeleteMapping("/delete/{matriculation}/{lId}")
+    public ResponseEntity<Void> deleteLead(@PathVariable int matriculation, @PathVariable int lId) {
+        Optional<Lead> leadOptional = leadRepository.findBylId(lId);
+
+        if (leadOptional.isPresent()) {
+            Lead lead = leadOptional.get();
+            if (lead.getUserMatriculation() == matriculation) {
+                leadRepository.deleteBylId(lead.getlId());
+
+/*              System.out.println("Lead deleted: " + lead.getlId());
+                System.out.println("Mat: " + matriculation);
+                System.out.println("Lead Id: " + lId);
+                System.out.println(lead.toString());
+                */
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
 }

@@ -15,6 +15,7 @@ public class Lead {
     private String content; // Content of the lead
     private List<String> imageUrls; // URLs for images associated with the lead
     private LocalDateTime createdAt; // Timestamp for when the lead was created
+    private LocalDateTime lastUpdatedAt; // Timestamp for when the lead was last updated
     private List<String> comments; // Comments on the lead
     private List<String> likes; // Likes on the lead
 
@@ -64,6 +65,14 @@ public class Lead {
         this.createdAt = createdAt;
     }
 
+    public LocalDateTime getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
+
     public List<String> getComments() {
         return comments;
     }
@@ -88,6 +97,7 @@ public class Lead {
                 ", content='" + content + '\'' +
                 ", imageUrls=" + imageUrls +
                 ", createdAt=" + createdAt +
+                ", lastUpdatedAt=" + lastUpdatedAt +
                 ", comments=" + comments +
                 ", likes=" + likes +
                 '}';

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,11 @@ public class UserController {
             userToUpdate.setDob(user.getDob());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setPassword(user.getPassword());
+
+            if (userToUpdate.getLastUpdatedAt() == null) {
+                userToUpdate.setLastUpdatedAt(LocalDateTime.now());
+            }
+
             return new ResponseEntity<>(this.userRepository.save(userToUpdate), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

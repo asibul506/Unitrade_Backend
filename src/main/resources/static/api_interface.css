@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+}
+
+.form-section {
+    flex: 1;
+    padding: 20px;
+}
+
+.result-section {
+    flex: 1;
+    padding: 20px;
+    border-left: 1px solid #ccc;
+}

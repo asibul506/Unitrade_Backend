@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="api_interface.js" defer></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+<h1 class="text-3xl font-bold text-center my-6">API Interface</h1>
+<div class="container mx-auto flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="form-section flex-1 p-6">
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Get All Users</h2>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="getAllUsers()">Get All Users</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Get User By Matriculation</h2>
+            <input type="number" id="userMatriculation" placeholder="Matriculation" class="w-full p-2 border rounded mb-2">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="getUserByMatriculation()">Get User</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Add User</h2>
+            <input type="number" id="addUserMatriculation" placeholder="Matriculation" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="addUserFirstName" placeholder="First Name" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="addUserLastName" placeholder="Last Name" class="w-full p-2 border rounded mb-2">
+            <input type="email" id="addUserEmail" placeholder="Email" class="w-full p-2 border rounded mb-2">
+            <input type="password" id="addUserPassword" placeholder="Password" class="w-full p-2 border rounded mb-2">
+            <input type="date" id="addUserDob" class="w-full p-2 border rounded mb-2">
+            <div class="mb-2">
+                <label class="block mb-1">Roles:</label>
+                <label><input type="checkbox" class="role-checkbox" value="ROLE_SUPER_ADMIN"> Super Admin</label>
+                <label><input type="checkbox" class="role-checkbox" value="ROLE_ADMIN"> Admin</label>
+                <label><input type="checkbox" class="role-checkbox" value="ROLE_USER"> User</label>
+            </div>
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="addUser()">Add User</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Update User By Matriculation</h2>
+            <input type="number" id="updateUserMatriculation" placeholder="Matriculation" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="updateUserFirstName" placeholder="First Name" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="updateUserLastName" placeholder="Last Name" class="w-full p-2 border rounded mb-2">
+            <input type="email" id="updateUserEmail" placeholder="Email" class="w-full p-2 border rounded mb-2">
+            <input type="password" id="updateUserPassword" placeholder="Password" class="w-full p-2 border rounded mb-2">
+            <input type="date" id="updateUserDob" class="w-full p-2 border rounded mb-4">
+            <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600" onclick="updateUserByMatriculation()">Update User</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Delete User By Matriculation</h2>
+            <input type="number" id="deleteUserMatriculation" placeholder="Matriculation" class="w-full p-2 border rounded mb-4">
+            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="deleteUserByMatriculation()">Delete User</button>
+        </div>
+        <hr class="my-6">
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Get All Leads</h2>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="getAllLeads()">Get All Leads</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Get Leads By User Matriculation</h2>
+            <input type="number" id="lUserMatriculation" placeholder="Matriculation" class="w-full p-2 border rounded mb-2">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="getLeadsByUser()">Get Leads</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Get Lead By ID</h2>
+            <input type="number" id="leadId" placeholder="Lead ID" class="w-full p-2 border rounded mb-2">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="getLeadById()">Get Lead</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Create Lead</h2>
+            <input type="number" id="lId" placeholder="LeadID" class="w-full p-2 border rounded mb-2">
+            <input type="number" id="matriculation" placeholder="User Matriculation" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="createLeadContent" placeholder="Content" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="createLeadImageUrls" placeholder="Image URLs (comma separated)" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="createLeadComments" placeholder="Comments (comma separated)" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="createLeadLikes" placeholder="Likes (comma separated)" class="w-full p-2 border rounded mb-4">
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="createLead()">Create Lead</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Update Lead</h2>
+            <input type="number" id="updateLeadId" placeholder="Lead ID" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="updateLeadContent" placeholder="Content" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="updateLeadImageUrls" placeholder="Image URLs (comma separated)" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="updateLeadComments" placeholder="Comments (comma separated)" class="w-full p-2 border rounded mb-2">
+            <input type="text" id="updateLeadLikes" placeholder="Likes (comma separated)" class="w-full p-2 border rounded mb-4">
+            <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600" onclick="updateLead()">Update Lead</button>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Delete Lead</h2>
+            <input type="number" id="deleteLeadMatriculation" placeholder="Matriculation" class="w-full p-2 border rounded mb-2">
+            <input type="number" id="deleteLeadId" placeholder="Lead ID" class="w-full p-2 border rounded mb-4">
+            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="deleteLead()">Delete Lead</button>
+        </div>
+    </div>
+    <div class="result-section flex-1 p-6 border-l border-gray-300 overflow-y-auto max-h-screen">
+        <h2 class="text-2xl font-semibold mb-4">Result</h2>
+        <pre id="result" class="bg-gray-100 p-4 rounded shadow-inner"></pre>
+    </div>
+</div>
+</body>
+</html>
